@@ -1,0 +1,26 @@
+{
+  "extends": "@adonisjs/tsconfig/tsconfig.client.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "ESNext",
+    "jsx": "react-jsx",
+    "composite": true,
+    "resolveJsonModule": true,
+    "paths": {
+      "~/*": ["./*"],
+      "@/*": ["./*"],
+      "~/generated/*": ["../.adonisjs/client/*"],
+      "~registry": ["../.adonisjs/client/registry.ts"],
+      "@translations/*": ["../resources/lang/*"]
+    }
+  },
+  "include": [
+    "./**/*.ts",
+    "../**/*.ts",
+    "./**/*.tsx",
+    "../.adonisjs/**/*.ts",
+    "../.adonisjs/client/**/*.ts",
+    "../.adonisjs/server/**/*.ts",
+    "../resources/lang/**/*.json"
+  ]
+}

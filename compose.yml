@@ -1,0 +1,66 @@
+version: "3.8"
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - postgres_volume:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: "${DB_DATABASE:-facturador}"
+      POSTGRES_USER: "${DB_USER:-postgres}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD:-postgres}"
+    ports:
+      - "5432:5432"
+    networks:
+      - kit-adonis-inertia-network
+
+  # Redis for caching and job queues
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis_volume:/data
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    networks:
+      - kit-adonis-inertia-network
+
+  # MinIO S3-compatible storage for documents
+  minio:
+    image: minio/minio:latest
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: "${MINIO_ROOT_USER:-minioadmin}"
+      MINIO_ROOT_PASSWORD: "${MINIO_ROOT_PASSWORD:-minioadmin123}"
+    volumes:
+      - minio_volume:/data
+    command: server /data --console-address ":9001"
+    networks:
+      - kit-adonis-inertia-network
+
+  # Mailpit for email testing in development
+  mailpit:
+    image: axllent/mailpit:latest
+    restart: unless-stopped
+    ports:
+      - "${FORWARD_MAILPIT_PORT:-1026}:1025"
+      - "${FORWARD_MAILPIT_DASHBOARD_PORT:-8026}:8025"
+    networks:
+      - kit-adonis-inertia-network
+
+volumes:
+  postgres_volume:
+  redis_volume:
+  minio_volume:
+
+networks:
+  kit-adonis-inertia-network:
+    driver: bridge
+
+# TODO: Cambiar el nombre de la red a network por el nombre del proyecto
