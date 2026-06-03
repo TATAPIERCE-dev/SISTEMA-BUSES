@@ -12,6 +12,18 @@ const routes = {
     tokens: [{"old":"/","type":0,"val":"/","end":""}],
     types: placeholder as Registry['home']['types'],
   },
+  'search': {
+    methods: ["GET","HEAD"],
+    pattern: '/search',
+    tokens: [{"old":"/search","type":0,"val":"search","end":""}],
+    types: placeholder as Registry['search']['types'],
+  },
+  'help': {
+    methods: ["GET","HEAD"],
+    pattern: '/help',
+    tokens: [{"old":"/help","type":0,"val":"help","end":""}],
+    types: placeholder as Registry['help']['types'],
+  },
   'new_account.create': {
     methods: ["GET","HEAD"],
     pattern: '/signup',
@@ -41,6 +53,18 @@ const routes = {
     pattern: '/logout',
     tokens: [{"old":"/logout","type":0,"val":"logout","end":""}],
     types: placeholder as Registry['session.destroy']['types'],
+  },
+  'bookings.index': {
+    methods: ["GET","HEAD"],
+    pattern: '/bookings',
+    tokens: [{"old":"/bookings","type":0,"val":"bookings","end":""}],
+    types: placeholder as Registry['bookings.index']['types'],
+  },
+  'bookings.cancel': {
+    methods: ["POST"],
+    pattern: '/bookings/:id/cancel',
+    tokens: [{"old":"/bookings/:id/cancel","type":0,"val":"bookings","end":""},{"old":"/bookings/:id/cancel","type":1,"val":"id","end":""},{"old":"/bookings/:id/cancel","type":0,"val":"cancel","end":""}],
+    types: placeholder as Registry['bookings.cancel']['types'],
   },
 } as const satisfies Record<string, AdonisEndpoint>
 

@@ -9,9 +9,13 @@ export default class NewAccountController {
 
   async store({ request, response, auth }: HttpContext) {
     const payload = await request.validateUsing(signupValidator);
+    const { redirectTo } = request.all();
     const user = await User.create({ ...payload });
 
     await auth.use("web").login(user);
+    if (redirectTo && typeof redirectTo === "string" && redirectTo.startsWith("/")) {
+      return response.redirect().toPath(redirectTo);
+    }
     response.redirect().toRoute("home");
   }
 }

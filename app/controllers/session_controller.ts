@@ -6,12 +6,21 @@ export default class SessionController {
     return inertia.render("auth/login", {});
   }
 
-  async store({ request, auth, response }: HttpContext) {
-    const { email, password } = request.all();
-    const user = await User.verifyCredentials(email, password);
-
-    await auth.use("web").login(user);
-    response.redirect().toRoute("home");
+  async store({ request, auth, response, session }: HttpContext) {
+    const { email, password, redirectTo } = request.all();
+    try {
+      const user = await User.verifyCredentials(email, password);
+      await auth.use("web").login(user);
+      if (redirectTo && typeof redirectTo === "string" && redirectTo.startsWith("/")) {
+        return response.redirect().toPath(redirectTo);
+      }
+      return response.redirect().toRoute("home");
+    } catch {
+      session.flashErrors({
+        email: "El correo electrónico o la contraseña no coinciden con nuestros registros.",
+      });
+      return response.redirect().back();
+    }
   }
 
   async destroy({ auth, response }: HttpContext) {
