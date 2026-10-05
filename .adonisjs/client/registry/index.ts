@@ -24,6 +24,36 @@ const routes = {
     tokens: [{"old":"/help","type":0,"val":"help","end":""}],
     types: placeholder as Registry['help']['types'],
   },
+  'seat_selection.show': {
+    methods: ["GET","HEAD"],
+    pattern: '/seats',
+    tokens: [{"old":"/seats","type":0,"val":"seats","end":""}],
+    types: placeholder as Registry['seat_selection.show']['types'],
+  },
+  'payment.show': {
+    methods: ["GET","HEAD"],
+    pattern: '/pagar',
+    tokens: [{"old":"/pagar","type":0,"val":"pagar","end":""}],
+    types: placeholder as Registry['payment.show']['types'],
+  },
+  'payment.invoice': {
+    methods: ["GET","HEAD"],
+    pattern: '/factura',
+    tokens: [{"old":"/factura","type":0,"val":"factura","end":""}],
+    types: placeholder as Registry['payment.invoice']['types'],
+  },
+  'booking_creation.hold': {
+    methods: ["POST"],
+    pattern: '/bookings/hold',
+    tokens: [{"old":"/bookings/hold","type":0,"val":"bookings","end":""},{"old":"/bookings/hold","type":0,"val":"hold","end":""}],
+    types: placeholder as Registry['booking_creation.hold']['types'],
+  },
+  'booking_creation.store': {
+    methods: ["POST"],
+    pattern: '/bookings',
+    tokens: [{"old":"/bookings","type":0,"val":"bookings","end":""}],
+    types: placeholder as Registry['booking_creation.store']['types'],
+  },
   'new_account.create': {
     methods: ["GET","HEAD"],
     pattern: '/signup',

@@ -40,6 +40,7 @@ function validateRut(rut: string): boolean {
 }
 
 interface Seat {
+  id: string;
   number: string;
   type: "Salón Cama" | "Salón Cama Light" | "ESC";
   price: number;
@@ -62,22 +63,27 @@ export default function SeatSelectionPage() {
   }>();
   const { user } = props;
 
-  const trip = {
-    id: "1",
-    departureTime: "08:30",
-    arrivalTime: "10:20",
-    duration: "1h 50m",
-    originTerminal: "Terminal Alameda",
-    destTerminal: "Terminal Valparaíso",
-    operator: "Tur Bus",
-    seatType: "Salón Cama",
-    price: 8000,
-    isDirect: true,
-  };
+  const page = usePage<{
+    trip: {
+      id: string;
+      departureTime: string;
+      arrivalTime: string;
+      duration: string;
+      originTerminal: string;
+      destTerminal: string;
+      operator: string;
+      price: number;
+      origin: string;
+      destination: string;
+      date: string | null;
+    };
+    seats: Seat[];
+  }>();
+  const trip = page.props.trip;
   const searchParams = {
-    origin: "Santiago",
-    destination: "Valparaíso",
-    date: new Date().toISOString().split("T")[0],
+    origin: trip.origin,
+    destination: trip.destination,
+    date: trip.date,
   };
 
   const [activeLevel, setActiveLevel] = useState<1 | 2>(2);
@@ -106,7 +112,7 @@ export default function SeatSelectionPage() {
   }>({});
 
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
-  const [ticketCode, setTicketCode] = useState("");
+  const [ticketCode] = useState("");
 
   // Prefill values automatically if the passenger is logged in and buying for themselves
   useEffect(() => {
@@ -226,52 +232,7 @@ export default function SeatSelectionPage() {
     validateField(field, formatted);
   };
 
-  const [seats, setSeats] = useState<Seat[]>([
-    { number: "3", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "ESC", type: "ESC", price: 0, status: "occupied", level: 2 },
-    { number: "10", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "13", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "16", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "19", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "22", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "25", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "28", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "31", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "2", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "5", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "7", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "9", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "12", type: "Salón Cama", price: 15750, status: "available", level: 2 },
-    { number: "15", type: "Salón Cama", price: 15750, status: "available", level: 2 },
-    { number: "18", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "21", type: "Salón Cama Light", price: 14700, status: "light-available", level: 2 },
-    { number: "24", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "27", type: "Salón Cama Light", price: 14700, status: "light-available", level: 2 },
-    { number: "30", type: "Salón Cama", price: 15750, status: "available", level: 2 },
-    { number: "1", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "4", type: "Salón Cama", price: 15750, status: "available", level: 2 },
-    { number: "6", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "8", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "11", type: "Salón Cama", price: 15750, status: "available", level: 2 },
-    { number: "14", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "17", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "20", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "23", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "26", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "29", type: "Salón Cama", price: 15750, status: "occupied", level: 2 },
-    { number: "34", type: "Salón Cama", price: 15750, status: "occupied", level: 1 },
-    { number: "37", type: "Salón Cama", price: 15750, status: "occupied", level: 1 },
-    { number: "40", type: "Salón Cama", price: 15750, status: "occupied", level: 1 },
-    { number: "43", type: "Salón Cama", price: 15750, status: "occupied", level: 1 },
-    { number: "33", type: "Salón Cama", price: 15750, status: "occupied", level: 1 },
-    { number: "36", type: "Salón Cama", price: 15750, status: "occupied", level: 1 },
-    { number: "39", type: "Salón Cama", price: 15750, status: "occupied", level: 1 },
-    { number: "42", type: "Salón Cama", price: 15750, status: "occupied", level: 1 },
-    { number: "32", type: "Salón Cama", price: 15750, status: "occupied", level: 1 },
-    { number: "35", type: "Salón Cama", price: 15750, status: "occupied", level: 1 },
-    { number: "38", type: "Salón Cama", price: 15750, status: "available", level: 1 },
-    { number: "41", type: "Salón Cama", price: 15750, status: "occupied", level: 1 },
-  ]);
+  const [seats, setSeats] = useState<Seat[]>(page.props.seats);
 
   const selectedSeats = seats.filter((s) => s.status === "selected");
 
@@ -329,6 +290,21 @@ export default function SeatSelectionPage() {
     };
   }, [timeLeft]);
 
+  useEffect(() => {
+    if (timeLeft === 0) {
+      setSeats((currentSeats) =>
+        currentSeats.map((seat) =>
+          seat.status === "selected"
+            ? {
+                ...seat,
+                status: seat.type === "Salón Cama Light" ? "light-available" : "available",
+              }
+            : seat,
+        ),
+      );
+    }
+  }, [timeLeft]);
+
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
@@ -370,9 +346,20 @@ export default function SeatSelectionPage() {
       return;
     }
 
-    const rand = Math.floor(100000 + Math.random() * 900000);
-    setTicketCode(`TE-${rand}`);
-    setIsSuccessModalOpen(true);
+    if (timeLeft === 0) {
+      setClientErrors({
+        fullName: "El tiempo para continuar expiró. Selecciona nuevamente el asiento.",
+      });
+      return;
+    }
+
+    router.get("/pagar", {
+      viajeId: trip.id,
+      seatIds: selectedSeats.map((seat) => seat.id),
+      nombrePasajero: fullName,
+      correoPasajero: email,
+      telefonoPasajero: phone,
+    });
   };
 
   const handleCloseSuccess = () => {

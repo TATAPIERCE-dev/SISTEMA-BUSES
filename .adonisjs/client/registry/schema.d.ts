@@ -27,8 +27,8 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/trips_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/trips_controller').default['index']>>>
     }
   }
   'help': {
@@ -41,6 +41,66 @@ export interface Registry {
       query: {}
       response: unknown
       errorResponse: unknown
+    }
+  }
+  'seat_selection.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/seats'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/seat_selection_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/seat_selection_controller').default['show']>>>
+    }
+  }
+  'payment.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/pagar'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/payment_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/payment_controller').default['show']>>>
+    }
+  }
+  'payment.invoice': {
+    methods: ["GET","HEAD"]
+    pattern: '/factura'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/payment_controller').default['invoice']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/payment_controller').default['invoice']>>>
+    }
+  }
+  'booking_creation.hold': {
+    methods: ["POST"]
+    pattern: '/bookings/hold'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/booking_hold').bookingHoldValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/booking_hold').bookingHoldValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/booking_creation_controller').default['hold']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/booking_creation_controller').default['hold']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'booking_creation.store': {
+    methods: ["POST"]
+    pattern: '/bookings'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/booking').bookingValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/booking').bookingValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/booking_creation_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/booking_creation_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'new_account.create': {

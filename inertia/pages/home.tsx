@@ -4,6 +4,20 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 
 export default function Home() {
+  const cities = [
+    "Santiago",
+    "Valparaíso",
+    "Concepción",
+    "La Serena",
+    "Temuco",
+    "Antofagasta",
+    "Iquique",
+    "Puerto Montt",
+    "Rancagua",
+    "Talca",
+    "Chillán",
+    "Osorno",
+  ];
   const [origen, setOrigen] = useState("Santiago");
   const [destino, setDestino] = useState("Valparaíso");
   const [fecha, setFecha] = useState(new Date().toISOString().split("T")[0]);
@@ -72,14 +86,21 @@ export default function Home() {
                       <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary">
                         location_on
                       </span>
-                      <input
-                        type="text"
+                      <select
                         value={origen}
                         onChange={(e) => setOrigen(e.target.value)}
-                        placeholder="¿De dónde sales?"
-                        className="w-full pl-10 pr-4 py-3 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-outline text-gray-900"
+                        className="w-full pl-10 pr-4 py-3 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-gray-900"
                         required
-                      />
+                      >
+                        <option value="" disabled>
+                          Selecciona una ciudad
+                        </option>
+                        {cities.map((city) => (
+                          <option key={city} value={city} disabled={city === destino}>
+                            {city}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
 
@@ -91,14 +112,21 @@ export default function Home() {
                       <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-primary">
                         near_me
                       </span>
-                      <input
-                        type="text"
+                      <select
                         value={destino}
                         onChange={(e) => setDestino(e.target.value)}
-                        placeholder="¿A dónde vas?"
-                        className="w-full pl-10 pr-4 py-3 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-outline text-gray-900"
+                        className="w-full pl-10 pr-4 py-3 bg-white border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all text-gray-900"
                         required
-                      />
+                      >
+                        <option value="" disabled>
+                          Selecciona una ciudad
+                        </option>
+                        {cities.map((city) => (
+                          <option key={city} value={city} disabled={city === origen}>
+                            {city}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
 
@@ -128,6 +156,11 @@ export default function Home() {
                     Buscar Viajes
                   </button>
                 </form>
+                <datalist id="city-options">
+                  {cities.map((city) => (
+                    <option key={city} value={city} />
+                  ))}
+                </datalist>
               </div>
             </div>
           </section>

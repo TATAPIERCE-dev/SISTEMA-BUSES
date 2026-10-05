@@ -31,7 +31,7 @@ export class AsientosBusSchema extends BaseModel {
 }
 
 export class BusSchema extends BaseModel {
-  static $columns = ['actualizadoEn', 'capacidad', 'creadoEn', 'estado', 'id', 'modelo', 'pisos', 'placa'] as const
+  static $columns = ['actualizadoEn', 'capacidad', 'creadoEn', 'estado', 'id', 'modelo', 'operador', 'pisos', 'placa'] as const
   $columns = BusSchema.$columns
   @column.dateTime()
   declare actualizadoEn: DateTime
@@ -45,6 +45,8 @@ export class BusSchema extends BaseModel {
   declare id: string
   @column()
   declare modelo: string
+  @column()
+  declare operador: string
   @column()
   declare pisos: number
   @column()
@@ -136,31 +138,30 @@ export class RutaSchema extends BaseModel {
 }
 
 export class UserSchema extends BaseModel {
-  static $columns = ['createdAt', 'email', 'fullName', 'id', 'password', 'updatedAt', 'documentType', 'documentNumber', 'phoneNumber', 'gender', 'emergencyPhone'] as const
+  static $columns = ['createdAt', 'documentNumber', 'documentType', 'email', 'emergencyPhone', 'fullName', 'gender', 'id', 'password', 'phoneNumber', 'updatedAt'] as const
   $columns = UserSchema.$columns
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column()
+  declare documentNumber: string | null
+  @column()
+  declare documentType: string | null
+  @column()
   declare email: string
   @column()
+  declare emergencyPhone: string | null
+  @column()
   declare fullName: string | null
+  @column()
+  declare gender: string | null
   @column({ isPrimary: true })
   declare id: number
   @column({ serializeAs: null })
   declare password: string
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
-  declare updatedAt: DateTime | null
-
-  @column()
-  declare documentType: string | null
-  @column()
-  declare documentNumber: string | null
   @column()
   declare phoneNumber: string | null
-  @column()
-  declare gender: string | null
-  @column()
-  declare emergencyPhone: string | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
 }
 
 export class ViajeSchema extends BaseModel {

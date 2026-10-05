@@ -15,15 +15,16 @@ router
   .on("/")
   .renderInertia("home", undefined as never)
   .as("home");
-router
-  .on("/search")
-  .renderInertia("TripSearchPage", undefined as never)
-  .as("search");
+router.get("/search", [controllers.Trips, "index"]).as("search");
 router
   .on("/help")
   .renderInertia("HelpPage", undefined as never)
   .as("help");
-router.on("/seats").renderInertia("SeatSelectionPage", undefined as never);
+router.get("/seats", [controllers.SeatSelection, "show"]);
+router.get("/pagar", [controllers.Payment, "show"]);
+router.get("/factura", [controllers.Payment, "invoice"]);
+router.post("/bookings/hold", [controllers.BookingCreation, "hold"]);
+router.post("/bookings", [controllers.BookingCreation, "store"]);
 
 router.group(() => {
   router.on("/admin/fleet").renderInertia("FleetPage", undefined as never);

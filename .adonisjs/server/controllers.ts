@@ -4,8 +4,11 @@
  */
 
 export const controllers = {
+  BookingCreation: () => import('#controllers/booking_creation_controller'),
   Bookings: () => import('#controllers/bookings_controller'),
   NewAccount: () => import('#controllers/new_account_controller'),
+  Payment: () => import('#controllers/payment_controller'),
+  SeatSelection: () => import('#controllers/seat_selection_controller'),
   Session: () => import('#controllers/session_controller'),
   Trips: () => import('#controllers/trips_controller'),
 }

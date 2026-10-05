@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 import { MapPin, Calendar, ArrowLeftRight, Search, Bus, ArrowRight, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -23,94 +23,32 @@ export interface Trip {
   destino: string;
 }
 
-const SEED_TRIPS: Trip[] = [
-  {
-    id: "1",
-    departureTime: "08:00",
-    arrivalTime: "09:45",
-    duration: "1h 45m",
-    originTerminal: "Terminal Alameda",
-    destTerminal: "Terminal Valparaíso",
-    operator: "Tur Bus",
-    seatType: "Salón Cama",
-    price: 8000,
-    isDirect: true,
-    origen: "Santiago",
-    destino: "Valparaíso",
-  },
-  {
-    id: "2",
-    departureTime: "10:30",
-    arrivalTime: "12:15",
-    duration: "1h 45m",
-    originTerminal: "Terminal Alameda",
-    destTerminal: "Terminal Valparaíso",
-    operator: "Pullman Bus",
-    seatType: "Salón Cama Light",
-    price: 9500,
-    isDirect: true,
-    origen: "Santiago",
-    destino: "Valparaíso",
-  },
-  {
-    id: "3",
-    departureTime: "14:00",
-    arrivalTime: "18:30",
-    duration: "4h 30m",
-    originTerminal: "Terminal Alameda",
-    destTerminal: "Terminal Collao",
-    operator: "EME Bus",
-    seatType: "Salón Cama",
-    price: 25000,
-    isDirect: true,
-    origen: "Santiago",
-    destino: "Concepción",
-  },
-  {
-    id: "4",
-    departureTime: "06:00",
-    arrivalTime: "11:00",
-    duration: "5h 00m",
-    originTerminal: "Terminal Sur",
-    destTerminal: "Terminal La Serena",
-    operator: "Tur Bus",
-    seatType: "Salón Cama Light",
-    price: 15000,
-    isDirect: true,
-    origen: "Santiago",
-    destino: "La Serena",
-  },
-  {
-    id: "5",
-    departureTime: "22:00",
-    arrivalTime: "06:00",
-    duration: "8h 00m",
-    originTerminal: "Terminal Alameda",
-    destTerminal: "Terminal Antofagasta",
-    operator: "Pullman Bus",
-    seatType: "Salón Cama",
-    price: 60000,
-    isDirect: true,
-    origen: "Santiago",
-    destino: "Antofagasta",
-  },
-  {
-    id: "6",
-    departureTime: "16:00",
-    arrivalTime: "17:30",
-    duration: "1h 30m",
-    originTerminal: "Terminal Rancagua",
-    destTerminal: "Terminal Alameda",
-    operator: "EME Bus",
-    seatType: "ESC",
-    price: 4000,
-    isDirect: true,
-    origen: "Rancagua",
-    destino: "Santiago",
-  },
-];
+export interface Destination {
+  id: string;
+  ciudad: string;
+  terminal: string | null;
+}
 
-export default function TripSearchPage() {
+interface TripSearchPageProps {
+  trips: Trip[];
+  destinos: Destination[];
+  searchParams: {
+    origen: string;
+    destino: string;
+    fecha: string;
+    operadores?: string;
+    tipos?: string;
+    horarios?: string;
+    directo?: string;
+    precioMax?: string;
+  };
+}
+
+export default function TripSearchPage({
+  trips,
+  destinos,
+  searchParams: serverSearchParams,
+}: TripSearchPageProps) {
   const getQueryParam = (name: string, defaultValue: string) => {
     if (typeof window === "undefined") {
       return defaultValue;
@@ -119,36 +57,67 @@ export default function TripSearchPage() {
     return params.get(name) || defaultValue;
   };
 
-  const initialOrigen = getQueryParam("origen", "Santiago");
-  const initialDestino = getQueryParam("destino", "Valparaíso");
-  const initialFecha = getQueryParam("fecha", new Date().toISOString().split("T")[0]);
+  const initialOrigen = getQueryParam("origen", serverSearchParams.origen);
+  const initialDestino = getQueryParam("destino", serverSearchParams.destino);
+  const initialFecha = getQueryParam("fecha", serverSearchParams.fecha);
 
   const [originInput, setOriginInput] = useState(initialOrigen);
   const [destinationInput, setDestinationInput] = useState(initialDestino);
   const [dateInput, setDateInput] = useState(initialFecha);
-  const [searchParams, setSearchParams] = useState({
-    origen: initialOrigen,
-    destino: initialDestino,
-    fecha: initialFecha,
-  });
-  const [operators, setOperators] = useState<string[]>(["Tur Bus", "Pullman Bus", "EME Bus"]);
-  const [seatTypes, setSeatTypes] = useState<string[]>(["Salón Cama", "Salón Cama Light", "ESC"]);
+  const availableOperators = [...new Set(trips.map((trip) => trip.operator))];
+  const availableSeatTypes = [...new Set(trips.map((trip) => trip.seatType))];
+  const departureRanges = ["Mañana", "Tarde", "Noche"];
+  const [operators, setOperators] = useState<string[]>(
+    serverSearchParams.operadores ? serverSearchParams.operadores.split(",") : availableOperators,
+  );
+  const [seatTypes, setSeatTypes] = useState<string[]>(
+    serverSearchParams.tipos ? serverSearchParams.tipos.split(",") : availableSeatTypes,
+  );
+  const [departureTimes, setDepartureTimes] = useState<string[]>(
+    serverSearchParams.horarios ? serverSearchParams.horarios.split(",") : departureRanges,
+  );
+  const [directOnly, setDirectOnly] = useState(serverSearchParams.directo === "1");
+  const [maxPrice, setMaxPrice] = useState(Number(serverSearchParams.precioMax) || 70000);
+  const searchParams = { origen: originInput, destino: destinationInput, fecha: dateInput };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    setSearchParams({ origen: originInput, destino: destinationInput, fecha: dateInput });
-    if (typeof window !== "undefined") {
-      const url = new URL(window.location.href);
-      url.searchParams.set("origen", originInput);
-      url.searchParams.set("destino", destinationInput);
-      url.searchParams.set("fecha", dateInput);
-      window.history.pushState({}, "", url.toString());
-    }
+    router.get(
+      "/search",
+      {
+        origen: originInput,
+        destino: destinationInput,
+        fecha: dateInput,
+        operadores: operators.join(","),
+        tipos: seatTypes.join(","),
+        horarios: departureTimes.join(","),
+        directo: directOnly ? "1" : "0",
+        precioMax: String(maxPrice),
+      },
+      { preserveState: true },
+    );
   };
 
   const handleSwap = () => {
+    if (originInput === destinationInput) {
+      return;
+    }
     setOriginInput(destinationInput);
     setDestinationInput(originInput);
+  };
+
+  const handleOriginChange = (value: string) => {
+    setOriginInput(value);
+    if (value === destinationInput) {
+      setDestinationInput("");
+    }
+  };
+
+  const handleDestinationChange = (value: string) => {
+    setDestinationInput(value);
+    if (value === originInput) {
+      setOriginInput("");
+    }
   };
 
   const handleOperatorToggle = (op: string) => {
@@ -164,17 +133,37 @@ export default function TripSearchPage() {
   };
 
   const handleClearFilters = () => {
-    setOperators(["Tur Bus", "Pullman Bus", "EME Bus"]);
-    setSeatTypes(["Salón Cama", "Salón Cama Light", "ESC"]);
+    setOperators(availableOperators);
+    setSeatTypes(availableSeatTypes);
+    setDepartureTimes(departureRanges);
+    setDirectOnly(false);
+    setMaxPrice(70000);
+  };
+
+  const handleDepartureToggle = (range: string) => {
+    setDepartureTimes(
+      departureTimes.includes(range)
+        ? departureTimes.filter((item) => item !== range)
+        : [...departureTimes, range],
+    );
   };
 
   const filteredTrips = useMemo(() => {
-    return SEED_TRIPS.filter((trip) => {
+    return trips.filter((trip) => {
       const matchesOperator = operators.includes(trip.operator);
       const matchesSeatType = seatTypes.includes(trip.seatType);
-      return matchesOperator && matchesSeatType;
+      const departureHour = Number(trip.departureTime.split(":")[0]);
+      const departureRange = departureHour < 12 ? "Mañana" : departureHour < 18 ? "Tarde" : "Noche";
+      const matchesDeparture = departureTimes.includes(departureRange);
+      return (
+        matchesOperator &&
+        matchesSeatType &&
+        matchesDeparture &&
+        (!directOnly || trip.isDirect) &&
+        trip.price <= maxPrice
+      );
     });
-  }, [operators, seatTypes]);
+  }, [trips, operators, seatTypes, departureTimes, directOnly, maxPrice]);
 
   return (
     <>
@@ -190,14 +179,26 @@ export default function TripSearchPage() {
                 </Label>
                 <div className="relative w-full">
                   <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-                  <Input
+                  <select
                     id="origin"
                     value={originInput}
-                    onChange={(e) => setOriginInput(e.target.value)}
-                    placeholder="Ciudad de origen"
-                    className="pl-10 pr-4"
+                    onChange={(e) => handleOriginChange(e.target.value)}
+                    className="w-full h-10 rounded-md border border-input bg-background pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-blue-500"
                     required
-                  />
+                  >
+                    <option value="" disabled>
+                      Selecciona una ciudad
+                    </option>
+                    {destinos.map((destino) => (
+                      <option
+                        key={destino.id}
+                        value={destino.ciudad}
+                        disabled={destino.ciudad === destinationInput}
+                      >
+                        {destino.ciudad}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
               <div className="hidden md:flex items-center justify-center mb-1">
@@ -216,14 +217,26 @@ export default function TripSearchPage() {
                 </Label>
                 <div className="relative w-full">
                   <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
-                  <Input
+                  <select
                     id="destination"
                     value={destinationInput}
-                    onChange={(e) => setDestinationInput(e.target.value)}
-                    placeholder="Ciudad de destino"
-                    className="pl-10 pr-4"
+                    onChange={(e) => handleDestinationChange(e.target.value)}
+                    className="w-full h-10 rounded-md border border-input bg-background pl-10 pr-4 text-sm outline-none focus:ring-2 focus:ring-blue-500"
                     required
-                  />
+                  >
+                    <option value="" disabled>
+                      Selecciona una ciudad
+                    </option>
+                    {destinos.map((destino) => (
+                      <option
+                        key={destino.id}
+                        value={destino.ciudad}
+                        disabled={destino.ciudad === originInput}
+                      >
+                        {destino.ciudad}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
               <div className="w-full md:w-1/4 flex flex-col gap-1.5">
@@ -287,6 +300,69 @@ export default function TripSearchPage() {
                           <span className="text-sm text-gray-700 font-medium">{op}</span>
                         </label>
                       ))}
+                    </div>
+                    <hr className="border-gray-200" />
+                    <div className="flex flex-col gap-3">
+                      <h3 className="text-sm font-semibold text-gray-900">Horario de salida</h3>
+                      <div className="flex flex-col gap-2.5">
+                        {departureRanges.map((range) => (
+                          <label
+                            key={range}
+                            className="flex items-center gap-3 cursor-pointer select-none"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={departureTimes.includes(range)}
+                              onChange={() => handleDepartureToggle(range)}
+                              className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                            />
+                            <span className="text-sm text-gray-700 font-medium">
+                              {range === "Mañana"
+                                ? "Mañana (05:00 - 12:00)"
+                                : range === "Tarde"
+                                  ? "Tarde (12:00 - 18:00)"
+                                  : "Noche (18:00 - 05:00)"}
+                            </span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                    <hr className="border-gray-200" />
+                    <div className="flex flex-col gap-3">
+                      <h3 className="text-sm font-semibold text-gray-900">Preferencias</h3>
+                      <label className="flex items-center gap-3 cursor-pointer select-none">
+                        <input
+                          type="checkbox"
+                          checked={directOnly}
+                          onChange={(event) => setDirectOnly(event.target.checked)}
+                          className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        />
+                        <span className="text-sm text-gray-700 font-medium">
+                          Solo viajes directos
+                        </span>
+                      </label>
+                    </div>
+                    <hr className="border-gray-200" />
+                    <div className="flex flex-col gap-3">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-sm font-semibold text-gray-900">Precio máximo</h3>
+                        <span className="text-xs font-bold text-blue-600">
+                          ${maxPrice.toLocaleString("es-CL")}
+                        </span>
+                      </div>
+                      <input
+                        type="range"
+                        min="5000"
+                        max="70000"
+                        step="5000"
+                        value={maxPrice}
+                        onChange={(event) => setMaxPrice(Number(event.target.value))}
+                        className="w-full accent-blue-600"
+                      />
+                      <div className="flex justify-between text-[11px] text-gray-400">
+                        <span>$5.000</span>
+                        <span>$70.000</span>
+                      </div>
                     </div>
                   </div>
                   <hr className="border-gray-200" />

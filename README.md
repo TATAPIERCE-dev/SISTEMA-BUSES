@@ -1,249 +1,166 @@
-# React Starter Kit
+# TravelEase
 
-Starter kit personal basado en [AdonisJS Inertia Starter Kit](https://github.com/adonisjs/react-starter-kit), adaptado para crear aplicaciones AdonisJS + Inertia + React con una base moderna, tipada y preparada para UI escalable.
+Sistema web de reserva de pasajes de bus para rutas dentro de Chile. Permite buscar destinos, consultar horarios, seleccionar asientos, simular pagos con tarjeta y generar un comprobante de compra.
 
-## 🚀 Tecnologías
+## Funcionalidades
 
-### Backend
+- Busqueda de viajes por origen, destino y fecha.
+- Catalogo de ciudades chilenas con rutas y horarios disponibles.
+- Filtros por operador, tipo de asiento, horario, viaje directo y precio maximo.
+- Seleccion visual de asientos por piso.
+- Bloqueo temporal de asientos durante 10 minutos.
+- Compra como invitado o usuario registrado.
+- Pago simulado con Visa o Mastercard.
+- Datos de tarjeta de prueba sin cobros reales.
+- Generacion de factura y comprobante en una URL independiente.
+- Registro, inicio de sesion y consulta de reservas.
+- Proteccion CSRF y validacion de formularios en backend.
 
-- **AdonisJS 7.x** - Framework Node.js con TypeScript
-- **Lucid ORM** - ORM para base de datos
-- **VineJS** - Validación de datos en backend
-- **Inertia.js** - Aplicaciones SPA server-driven sin API REST obligatoria
-- **PostgreSQL** - Base de datos principal
-- **Redis** - Sesiones/cache según configuración del proyecto
+## Tecnologias
 
-### Frontend
+- AdonisJS 7
+- TypeScript
+- PostgreSQL
+- Lucid ORM
+- React 19
+- Inertia.js
+- Vite
+- Tailwind CSS 4
+- VineJS
+- Luxon
 
-- **React 19** - Biblioteca de UI
-- **TypeScript** - Tipado estático
-- **Vite** - Build tool y dev server
-- **Inertia.js React** - Integración React con Inertia
-- **Tailwind CSS v4** - Framework CSS utility-first configurado
-- **shadcn/ui ready** - `components.json`, aliases y utilidad `cn()` listos para instalar componentes cuando se necesiten
+## Requisitos
 
-### Herramientas de desarrollo
+- Node.js 20 o superior
+- npm
+- PostgreSQL 14 o superior
 
-- **Oxlint** - Linter rápido para TypeScript/React
-- **Oxfmt** - Formateador rápido
-- **ESLint/Prettier** - Disponibles como fallback opcional
-- **Docker Compose** - Servicios de desarrollo incluidos en `compose.yml`
+## Instalacion
 
-## 📋 Características
-
-- ✅ Autenticación con sesiones
-- ✅ Sistema de usuarios
-- ✅ Validación de formularios con VineJS
-- ✅ Protección CSRF
-- ✅ Inertia + React con SSR configurado
-- ✅ HMR con Vite
-- ✅ TypeScript en backend y frontend
-- ✅ Tailwind CSS v4 listo para usar
-- ✅ Preparado para instalar shadcn/ui en el futuro
-- ✅ `components.json` configurado
-- ✅ Utilidad `cn()` en `inertia/lib/utils.ts`
-- ✅ Reglas locales de Oxlint para convenciones AdonisJS
-- ✅ Estructura de proyecto escalable
-
-## 🛠️ Instalación
-
-1. Clonar el repositorio:
+1. Clona el repositorio:
 
 ```bash
-git clone https://github.com/VixoPlank/react-starter-kit.git
-cd react-starter-kit
+git clone <URL_DEL_REPOSITORIO>
+cd sistema-reserva-buses
 ```
 
-2. Instalar dependencias:
+2. Instala las dependencias:
 
 ```bash
 npm install
 ```
 
-3. Configurar variables de entorno:
+3. Copia el archivo de entorno:
 
 ```bash
 cp .env.example .env
 ```
 
-4. Generar la clave de la aplicación:
+En Windows PowerShell puedes usar:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+4. Configura PostgreSQL en `.env`:
+
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=tu_contrasena
+DB_DATABASE=sistema_reserva_buses
+```
+
+5. Genera la clave de la aplicacion:
 
 ```bash
 node ace generate:key
 ```
 
-5. Configurar la base de datos en `.env`:
-
-```env
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=tu_usuario
-DB_PASSWORD=tu_contraseña
-DB_DATABASE=nombre_base_datos
-```
-
-6. Ejecutar migraciones:
+6. Ejecuta las migraciones y carga los datos iniciales:
 
 ```bash
 node ace migration:run
+node ace db:seed
 ```
 
-## 🚦 Uso
+## Ejecutar el proyecto
 
-### Desarrollo
+Inicia el servidor de desarrollo:
 
 ```bash
 npm run dev
 ```
 
-Esto iniciará:
+Abre [http://localhost:3333](http://localhost:3333).
 
-- Servidor AdonisJS en `http://localhost:3333`
-- Vite dev server con HMR
+Flujo principal:
 
-### Producción
+1. Selecciona origen, destino y fecha.
+2. Elige un viaje.
+3. Selecciona uno o mas asientos.
+4. Completa los datos del pasajero.
+5. Presiona `Proceder al Pago`.
+6. Selecciona Visa o Mastercard y confirma el pago de prueba.
+7. Consulta la factura generada.
 
-```bash
-npm run build
-npm start
-```
+## Tarjetas de prueba
 
-### Scripts disponibles
+La aplicacion no procesa pagos reales. Usa estos datos ficticios:
 
-```bash
-# Ejecutar tests
-npm test
+| Marca | Numero | Vencimiento | CVV |
+| --- | --- | --- | --- |
+| Visa | `4111111111111111` | `12/30` | `123` |
+| Mastercard | `5555555555554444` | `12/30` | `123` |
 
-# Lint rápido con Oxlint
-npm run lint
+El nombre del titular puede ser `JUAN PEREZ`.
 
-# Lint completo
-npm run lint:full
-
-# Fix automático de lint cuando aplique
-npm run lint:fix
-
-# Formatear con Oxfmt
-npm run format
-
-# Revisar formato
-npm run format:check
-
-# Type checking backend + frontend
-npm run typecheck
-
-# Fallbacks opcionales
-npm run lint:eslint
-npm run format:prettier
-```
-
-## 🎨 Tailwind CSS y shadcn/ui
-
-Tailwind CSS v4 ya está instalado y configurado en:
-
-```txt
-inertia/css/app.css
-vite.config.ts
-```
-
-El proyecto está preparado para shadcn/ui, pero no trae componentes instalados por defecto para mantener el starter liviano.
-
-Archivos/carpetas relevantes:
-
-```txt
-components.json
-inertia/components
-inertia/components/ui
-inertia/hooks
-inertia/lib/utils.ts
-```
-
-Para instalar componentes shadcn/ui más adelante:
+## Comandos disponibles
 
 ```bash
-npx shadcn@latest add button input card dialog dropdown-menu form
+npm run dev          # Desarrollo con HMR
+npm run build        # Compilar para produccion
+npm start            # Ejecutar la compilacion
+npm run typecheck    # Verificar TypeScript
+npm run lint         # Ejecutar Oxlint
+npm test             # Ejecutar pruebas
+node ace migration:run
+node ace db:seed
 ```
 
-Más detalles en [docs/shadcn.md](./docs/shadcn.md).
+## Estructura principal
 
-## 🧹 Oxlint/Oxfmt
-
-Este starter usa Oxlint/Oxfmt como tooling principal.
-
-Además incluye plugins locales de convenciones AdonisJS en:
-
-```txt
-tools/oxlint/plugins/adonisjs-no-unsafe-assertions.js
-tools/oxlint/plugins/adonisjs-conventions.js
+```text
+app/
+  controllers/       Controladores HTTP
+  models/            Modelos Lucid
+  validators/        Validadores VineJS
+database/
+  migrations/        Estructura de PostgreSQL
+  seeders/           Datos iniciales
+inertia/
+  pages/             Paginas React
+  components/        Componentes reutilizables
+start/
+  routes.ts          Rutas de la aplicacion
 ```
 
-Estos plugins están vendorizados dentro del starter para no depender del paquete privado `@Airie-dev/adonisjs-oxlint-config`.
+## Rutas principales
 
-Incluyen reglas para:
+- `/` - Pagina de inicio.
+- `/search` - Busqueda de viajes.
+- `/seats?tripId=<id>` - Seleccion de asientos.
+- `/pagar` - Pago simulado.
+- `/factura?reservationId=<id>` - Factura de la reserva.
+- `/login` - Inicio de sesion.
+- `/signup` - Registro de usuario.
+- `/bookings` - Reservas del usuario autenticado.
 
-- evitar `as any` / `as unknown`
-- mantener controllers delgados
-- evitar raw request input sin marcador explícito
-- exigir `execute()` en actions
-- evitar casts inseguros en Inertia/controllers/transformers
-- exigir logging estructurado en `catch`
+## Nota
 
-Más detalles en [docs/oxlint-oxfmt.md](./docs/oxlint-oxfmt.md).
+Este proyecto es una aplicacion educativa y de demostracion. Los pagos son simulados y las tarjetas mostradas en este README son datos de prueba.
 
-## 📚 Documentación adicional
+## Licencia
 
-```txt
-docs/shadcn.md                  # Cómo instalar y usar shadcn/ui
-docs/forms-zod-sonner-lucide.md # Guía opcional para RHF, Zod, Sonner y Lucide
-docs/oxlint-oxfmt.md            # Configuración de Oxlint/Oxfmt y reglas locales
-docs/TODO.md                    # Tareas pendientes
-```
-
-## 📁 Estructura del proyecto
-
-```txt
-react-starter-kit/
-├── app/                    # Lógica backend
-│   ├── controllers/        # Controladores
-│   ├── models/             # Modelos Lucid
-│   ├── middleware/         # Middleware personalizado
-│   ├── validators/         # Validadores VineJS
-│   └── transformers/       # Transformadores de datos
-├── config/                 # Configuración AdonisJS
-├── database/               # Migraciones y schema
-├── docs/                   # Documentación del starter
-├── inertia/                # Frontend React/Inertia
-│   ├── app/                # Entrada cliente
-│   ├── components/         # Componentes React
-│   │   └── ui/             # Destino para componentes shadcn/ui
-│   ├── css/                # Tailwind CSS v4 y tokens
-│   ├── hooks/              # Hooks frontend
-│   ├── layouts/            # Layouts Inertia
-│   ├── lib/                # Utilidades frontend
-│   └── pages/              # Páginas Inertia
-├── resources/              # Views Edge y recursos
-├── start/                  # Bootstrap/rutas/kernel
-└── tools/                  # Herramientas locales del starter
-    └── oxlint/plugins/     # Plugins Oxlint locales
-```
-
-## 🔐 Autenticación
-
-El proyecto incluye:
-
-- Login y registro de usuarios
-- Middleware de autenticación
-- Protección de rutas
-- Gestión de sesiones
-
-## 📄 Licencia
-
-Este es un proyecto personal. Basado en el [AdonisJS Inertia Starter Kit](https://github.com/adonisjs/react-starter-kit) (licencia MIT).
-
-## 🤝 Contribuciones
-
-Este es un proyecto personal, pero las sugerencias son bienvenidas.
-
----
-
-Hecho con ❤️ usando AdonisJS, Inertia y React.
+Proyecto personal para fines educativos y demostrativos.
