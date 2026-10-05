@@ -15,7 +15,7 @@ export const Footer: React.FC = () => {
           <a className="text-sm text-gray-500 hover:underline cursor-pointer">Socios Comerciales</a>
           <a className="text-sm text-gray-500 hover:underline cursor-pointer">Centro de Soporte</a>
         </nav>
-        <div className="text-sm text-gray-500">© 2024 TravelEase Global</div>
+        <div className="text-sm text-gray-500">© 2026 TravelEase Global</div>
       </div>
     </footer>
   );

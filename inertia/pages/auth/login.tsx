@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Head, useForm, Link } from "@inertiajs/react";
+import { Header } from "@/components/layout/Header";
 
 export default function Login() {
   // Extract redirectTo query parameter for seamless routing return
@@ -44,6 +45,7 @@ export default function Login() {
   return (
     <>
       <Head title="TravelEase - Iniciar Sesión" />
+      <Header />
       <div
         className="bg-background text-on-background min-h-screen flex items-center justify-center p-0 md:p-6 overflow-hidden font-sans"
         onMouseMove={handleMouseMove}
@@ -57,7 +59,7 @@ export default function Login() {
               ref={imageRef}
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out scale-[1.05]"
               alt="Luxury bus on scenic Chilean road"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCb0W95JLr-OngASQEhiXJl894gQDw65K5Lou5-_5sIKHUHMs_u-tSmCfiZAJIS6mdd_-0EF8Vb3AfnlE1rUuOEFeZ4Z2LbJtcEVN9PsrYCRJrhI1Ekp-GGDt8Wbuv2_-GUp0F4DMQ-AS3L4kOA_wEEYpxdUGbJFnjn5J55J_8LDn5DsCLHvREjZFvdrKu3RvbdxT9xb8emmxzEN80Ar3nI6227XApLtErTL7gv1ljpXtVU20pZFL2gzVOsW-J3upKZh-QKdFhdmce_"
+              src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=1200&q=85"
             />
             <div className="absolute bottom-12 left-12 z-20 text-white max-w-md animate-fade-in">
               <h1 className="text-4xl md:text-5xl font-black mb-4 text-white leading-tight tracking-tight">
@@ -256,7 +258,7 @@ export default function Login() {
                   </Link>
                 </p>
                 <p className="text-xs font-semibold text-outline-variant">
-                  © 2024 Voyage Pro. Todos los derechos reservados.
+                  © 2026 TravelEase. Todos los derechos reservados.
                 </p>
               </footer>
             </div>

@@ -37,7 +37,16 @@ export default function Home() {
   };
 
   const handlePresetSearch = (destName: string) => {
-    router.get("/search", { origen: "Santiago", destino: destName, fecha });
+    const availableDestination: Record<string, string> = {
+      "Torres del Paine": "Puerto Montt",
+      Atacama: "Antofagasta",
+      "Viña del Mar": "Valparaíso",
+    };
+    router.get("/search", {
+      origen: "Santiago",
+      destino: availableDestination[destName] ?? destName,
+      fecha,
+    });
   };
 
   return (
@@ -51,8 +60,8 @@ export default function Home() {
           <section className="relative h-[85vh] min-h-[600px] w-full flex items-center justify-center overflow-hidden">
             <div className="absolute inset-0 z-0">
               <img
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCO9gIbj5gkUI1-QiaSh2k5s40ds-2i-mtqR5XSh01_fJGlc-eQQ3-ZeMIrWRaHShkNhIugDSaTaroR5aFsHxo_mWHQF5RRkaO9rv5raWkPrGjTfVzZatliRj8rPxk6v8HmCpMsmq2yaEZL8AehsbnvElSI4n5p6Phd4tlLhOOKfFvAJer4khINF96lJISZ2BJ3PFQyejEXYSPEtD5siXBGa3h8inY1ljIXmo49Lmqb6o4LAZaD7f3eASolOxqLRmhlWdplehi0AuiW"
-                alt="Paisaje Chileno"
+                src="https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=1800&q=85"
+                alt="Bus de viajes en carretera"
                 className="w-full h-full object-cover brightness-[0.85]"
               />
               <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/40"></div>
@@ -232,7 +241,10 @@ export default function Home() {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Torres del Paine */}
-                <div className="group relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                <div
+                  onClick={() => handlePresetSearch("Torres del Paine")}
+                  className="group relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
+                >
                   <div className="h-64 overflow-hidden">
                     <img
                       src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXziR6bIrgBiR7ZqgecmS8k7Ik1GiyAHTci3xcmpmN-4gOsNYrZhBNkP9Xcx2eGfjVO-RrepZj3HrbHZnqgtszCCjWB5anhOYoe0yM7NVp1WltR05TzwXtMHr1t_GmCI4WZ-O_DV2SS2ho7FOdXAdTYoFMas-nD48vyR-AjN4IouaNwoKNtl1u6SZI1hQEvOUqeS-2hq2DqLFEDxp24sHZPgQF6Fqp4Ka7T9xEoBvwC9-9jpyT9QMSNaw1sGUZ0vxKXHC3qX2h8r_g"
@@ -270,7 +282,10 @@ export default function Home() {
                 </div>
 
                 {/* San Pedro / Atacama */}
-                <div className="group relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                <div
+                  onClick={() => handlePresetSearch("Atacama")}
+                  className="group relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
+                >
                   <div className="h-64 overflow-hidden">
                     <img
                       src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9A-HsIvgd1U2LN6C4vHHX21RyZ4mV-1ljBXg6FCIGJtJeyGGsa4c5ss7JAaWeUueYx9TAEE6adX1jFk_JrBh-WlShV9mvCOo_WdmSuQWcnvmBEiwgkF6S9tpo4n1gg2Wh-xPui3HL1fKolu56lmxGD98AfqTIr-TxbkiB7ruedCe368Se-p5e3QujRd1cQydUb37A9e9t-mqqBcNYCTILFCuYcbo8l-ar3NVRBV_zROEOsOu-zOXonSiLupyCOZsfKMR6cVRmTmap"
@@ -306,7 +321,10 @@ export default function Home() {
                 </div>
 
                 {/* Viña del Mar */}
-                <div className="group relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+                <div
+                  onClick={() => handlePresetSearch("Viña del Mar")}
+                  className="group relative bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
+                >
                   <div className="h-64 overflow-hidden">
                     <img
                       src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwZ64XX4_ZbcuWx5JjOoxjRuRUTLm6Wd3zgv-9cKYaFZuR7ZUz02rD_1kTxGch8rmZSEY5qvJOVRiPjWpo3WD1AVIQbiOmJrFtRL8stmA2MnsWnZzWemUF-AbjHBqLun26dD29ESRtLT6hcHZyqM6DrLPmwcu4HRM6ROxkCaIp_5LR5KgLysuxOBfqsGcuMde6hOvnCbzq7f1xXd5OeIeB1-MZX-AJaBow65CVYF4Hd0HqtHbjnOIs5vQGoGsv7tuL0EPWPr-7d3ys"

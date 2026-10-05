@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Head, useForm, Link } from "@inertiajs/react";
+import { Header } from "@/components/layout/Header";
 
 // Check Chilean RUT checksum and format
 function validateRut(rut: string): boolean {
@@ -209,6 +210,7 @@ export default function Signup() {
   return (
     <>
       <Head title="TravelEase - Crear Cuenta" />
+      <Header />
       <div
         className="bg-background text-on-background min-h-screen flex items-center justify-center p-0 md:p-6 overflow-hidden font-sans"
         onMouseMove={handleMouseMove}
@@ -752,7 +754,7 @@ export default function Signup() {
                   </Link>
                 </p>
                 <p className="text-[10px] font-semibold text-outline-variant">
-                  © 2024 Voyage Pro. Todos los derechos reservados.
+                  © 2026 TravelEase. Todos los derechos reservados.
                 </p>
               </footer>
             </div>

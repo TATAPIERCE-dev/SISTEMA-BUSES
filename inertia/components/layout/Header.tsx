@@ -35,7 +35,7 @@ export const Header: React.FC<HeaderProps> = ({ isSeatsPage = false }) => {
 
   return (
     <header className="bg-white shadow-sm border-b border-gray-200 w-full sticky top-0 z-50">
-      <div className="flex justify-between items-center w-full px-4 md:px-8 h-16 max-w-7xl mx-auto">
+      <div className="flex justify-between items-center w-full px-4 md:px-8 h-20 max-w-7xl mx-auto">
         <div className="flex items-center gap-4 md:gap-8">
           {isSeatsPage && (
             <Link
@@ -49,16 +49,16 @@ export const Header: React.FC<HeaderProps> = ({ isSeatsPage = false }) => {
 
           <Link
             href="/"
-            className="text-xl font-bold text-blue-600 tracking-tight cursor-pointer hover:opacity-90 transition-opacity"
+            className="text-2xl font-black text-blue-600 tracking-tight cursor-pointer hover:opacity-90 transition-opacity"
           >
             TravelEase
           </Link>
 
           {!isSeatsPage && (
-            <nav className="hidden md:flex gap-6 items-center">
+            <nav className="hidden md:flex gap-8 items-center">
               <Link
                 href="/"
-                className={`text-sm cursor-pointer transition-all duration-200 font-semibold ${
+                className={`text-base cursor-pointer transition-all duration-200 font-semibold ${
                   isHomeActive
                     ? "text-blue-600 border-b-2 border-blue-600 pb-1"
                     : "text-gray-500 hover:text-blue-600"
@@ -68,7 +68,7 @@ export const Header: React.FC<HeaderProps> = ({ isSeatsPage = false }) => {
               </Link>
               <Link
                 href="/bookings"
-                className={`text-sm cursor-pointer transition-all duration-200 font-semibold ${
+                className={`text-base cursor-pointer transition-all duration-200 font-semibold ${
                   isBookingsActive
                     ? "text-blue-600 border-b-2 border-blue-600 pb-1"
                     : "text-gray-500 hover:text-blue-600"
@@ -78,7 +78,7 @@ export const Header: React.FC<HeaderProps> = ({ isSeatsPage = false }) => {
               </Link>
               <Link
                 href="/help"
-                className={`text-sm cursor-pointer transition-all duration-200 font-semibold ${
+                className={`text-base cursor-pointer transition-all duration-200 font-semibold ${
                   url === "/help"
                     ? "text-blue-600 border-b-2 border-blue-600 pb-1"
                     : "text-gray-500 hover:text-blue-600"
